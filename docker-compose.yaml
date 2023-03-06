@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  religion-mysql-db:
+    image: mysql:8.0
+    container_name: religion-mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: 'mysql'
+      MYSQL_PASSWORD: 123456Aa@
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'religion'
+    volumes:
+      - ./_docker/mysql/data:/var/lib/mysql:rw
+      - ./pkg/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro

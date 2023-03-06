@@ -1,0 +1,25 @@
+HttpServer:
+  Port: ":8081"
+  PprofPort: ":8100"
+  Timeout: 15
+  ReadTimeout: 5
+  WriteTimeout: 5
+  CookieLifeTime: 44640
+  SessionCookieName: "session_token"
+
+logger:
+  Development: true
+  DisableCaller: false
+  DisableStacktrace: false
+  Encoding: json
+  Level: info
+
+mysql:
+  Host: localhost
+  Port: 3306
+  User: mysql
+  Password: 123456Aa@
+  Dbname: religion
+
+firebase:
+  Path: "./test.json"  
