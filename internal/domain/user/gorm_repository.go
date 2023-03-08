@@ -6,8 +6,9 @@ import (
 )
 
 type UserGormRepository interface {
-	Create(ctx context.Context, user *entities.User) (*entities.User, error)
-	Update(ctx context.Context, user *entities.User) (*entities.User, error)
-	GetSingle(ctx context.Context, uid string) (*entities.User, error)
-	GetAll(ctx context.Context) ([]entities.User, error)
+	CreateUser(ctx context.Context, user *entities.User) (*entities.User, error)
+	UpdateUser(ctx context.Context, user *entities.User) (*entities.User, error)
+	GetSingleUser(ctx context.Context, uid string) (*entities.User, error)
+	GetAllUsers(ctx context.Context) ([]entities.User, error)
+	CreateGroup(ctx context.Context, group *entities.Group) (*entities.Group, error)
 }

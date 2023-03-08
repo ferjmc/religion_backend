@@ -16,7 +16,7 @@ func NewUserRepository(db *gorm.DB) user.UserGormRepository {
 	return &userGormRepository{db: db}
 }
 
-func (u *userGormRepository) Create(ctx context.Context, user *entities.User) (*entities.User, error) {
+func (u *userGormRepository) CreateUser(ctx context.Context, user *entities.User) (*entities.User, error) {
 	err := u.db.Create(user).Error
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (u *userGormRepository) Create(ctx context.Context, user *entities.User) (*
 	return user, nil
 }
 
-func (u *userGormRepository) Update(ctx context.Context, user *entities.User) (*entities.User, error) {
+func (u *userGormRepository) UpdateUser(ctx context.Context, user *entities.User) (*entities.User, error) {
 	res := u.db.Model(&user).Updates(&user)
 	if res.Error != nil {
 		return nil, res.Error
@@ -32,7 +32,7 @@ func (u *userGormRepository) Update(ctx context.Context, user *entities.User) (*
 	return user, nil
 }
 
-func (u *userGormRepository) GetSingle(ctx context.Context, uid string) (*entities.User, error) {
+func (u *userGormRepository) GetSingleUser(ctx context.Context, uid string) (*entities.User, error) {
 	var user *entities.User
 	res := u.db.Model(entities.User{}).Joins("Groups").Where(&entities.User{Uid: uid}).First(&user)
 	if res.Error != nil {
@@ -41,11 +41,18 @@ func (u *userGormRepository) GetSingle(ctx context.Context, uid string) (*entiti
 	return user, nil
 }
 
-func (u *userGormRepository) GetAll(ctx context.Context) ([]entities.User, error) {
+func (u *userGormRepository) GetAllUsers(ctx context.Context) ([]entities.User, error) {
 	var users []entities.User
 	res := u.db.Find(&users)
 	if res.Error != nil {
 		return nil, res.Error
 	}
 	return users, nil
+}
+
+func (g *userGormRepository) CreateGroup(ctx context.Context, group *entities.Group) (*entities.Group, error) {
+	if err := g.db.Create(&group).Error; err != nil {
+		return nil, err
+	}
+	return group, nil
 }

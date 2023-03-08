@@ -24,7 +24,7 @@ func NewPostUsecase(repo post.PostRepository, user user.UserGormRepository, log 
 }
 
 func (u *postUseCase) getUser(ctx context.Context, uid string) (*entities.User, error) {
-	return u.user.GetSingle(ctx, uid)
+	return u.user.GetSingleUser(ctx, uid)
 }
 
 func (u *postUseCase) Create(ctx context.Context, uid string, input dto.CreatePostRequest) (*entities.Post, error) {

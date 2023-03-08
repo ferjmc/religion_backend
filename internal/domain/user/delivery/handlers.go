@@ -14,21 +14,23 @@ import (
 )
 
 type userHandlers struct {
-	cfg      *config.Config
-	group    *echo.Group
-	userUC   user.UseCase
-	logger   logger.Logger
-	validate *validator.Validate
+	cfg        *config.Config
+	userGroup  *echo.Group
+	groupGroup *echo.Group
+	userUC     user.UseCase
+	logger     logger.Logger
+	validate   *validator.Validate
 }
 
 func NewUserHandlers(
 	cfg *config.Config,
 	group *echo.Group,
+	ggroup *echo.Group,
 	userUC user.UseCase,
 	logger logger.Logger,
 	validate *validator.Validate,
 ) *userHandlers {
-	return &userHandlers{cfg: cfg, group: group, userUC: userUC, logger: logger, validate: validate}
+	return &userHandlers{cfg: cfg, userGroup: group, groupGroup: ggroup, userUC: userUC, logger: logger, validate: validate}
 }
 
 func (h *userHandlers) CreateUser() echo.HandlerFunc {
@@ -116,5 +118,31 @@ func (h *userHandlers) GetAllUsers() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusAccepted, &users)
+	}
+}
+
+func (h *userHandlers) CreateGroup() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := c.Request().Context()
+
+		var input dto.GroupRequest
+
+		if err := c.Bind(&input); err != nil {
+			h.logger.Errorf("c.Bind: %v", err)
+			return httperrors.ErrorCtxResponse(c, err)
+		}
+
+		if err := h.validate.StructCtx(ctx, &input); err != nil {
+			h.logger.Errorf("validate.StructCtx: %v", err)
+			return httperrors.ErrorCtxResponse(c, err)
+		}
+
+		group, err := h.userUC.CreateGroup(ctx, &input)
+		if err != nil {
+			h.logger.Errorf("userUC.CreateGroup: %v", err)
+			return httperrors.ErrorCtxResponse(c, err)
+		}
+
+		return c.JSON(http.StatusCreated, &group)
 	}
 }

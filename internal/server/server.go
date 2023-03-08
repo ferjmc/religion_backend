@@ -45,6 +45,7 @@ func (s *Server) Run() error {
 	validate := validator.New()
 	v1 := s.echo.Group("/api/v1")
 	userGroup := v1.Group("/users")
+	groupGroup := v1.Group("/group")
 	postGroup := v1.Group("/posts")
 
 	// auth middleware
@@ -55,7 +56,7 @@ func (s *Server) Run() error {
 	userRepository := repository.NewUserRepository(s.db)
 	userUseCase := usecase.New(userRepository, s.logger)
 
-	userHandlers := delivery.NewUserHandlers(s.cfg, userGroup, userUseCase, s.logger, validate)
+	userHandlers := delivery.NewUserHandlers(s.cfg, userGroup, groupGroup, userUseCase, s.logger, validate)
 	userHandlers.MapUserRoutes()
 
 	// posts

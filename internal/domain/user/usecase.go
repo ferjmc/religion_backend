@@ -11,4 +11,5 @@ type UseCase interface {
 	UpdateUser(ctx context.Context, req *dto.UpdateUserRequest) (*entities.User, error)
 	GetSingleUser(ctx context.Context, uid string) (*entities.User, error)
 	GetAllUsers(ctx context.Context) ([]entities.User, error)
+	CreateGroup(ctx context.Context, req *dto.GroupRequest) (*entities.Group, error)
 }
